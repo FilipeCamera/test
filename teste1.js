@@ -1,24 +1,22 @@
-var data =  require("./fakeData");
+let data = require("./fakeData");
 
-const getUser = ( req, res, next ) => {
-    
-    var name =  req.query.name;
+const getUser = (req, res, next) => {
+  const { name } = req.query;
 
-    for(let i = 0; i < data.length;  i++) {
-        if(i.name == name) {
-            res.send(data[i]);
-        }
-    }
+  const user = data.find((dado) => dado.name == name);
 
+  if (!user) return res.status(404).json({ message: "User not found" });
+
+  return res.status(200).json(user);
 };
 
-const getUsers = ( req, res, next ) => {
-    
-    res.send(data);
-    
+const getUsers = (req, res, next) => {
+  return data.length > 0
+    ? res.status(200).json(data)
+    : res.status(404).json({ message: "User not found" });
 };
 
 module.exports = {
-    getUser,
-    getUsers
+  getUser,
+  getUsers,
 };
